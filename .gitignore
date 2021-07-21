@@ -1,0 +1,7 @@
+log
+.idea
+backend/.idea
+backend/config/venv
+backend/config/.env
+backend/config/templates
+backend/config/apps.sock

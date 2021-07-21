@@ -1,0 +1,40 @@
+version: "3"
+
+services: 
+
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    restart: always
+    ports: 
+      - "7003:80"
+    volumes: 
+      - ./backend/config:/srv/code/config
+      - ./log:/var/log/nginx
+    depends_on: 
+      - web
+
+
+  db:
+    image: postgres
+    container_name: main.postgres
+    restart: always
+    environment: 
+      POSTGRES_DATABASE: "django"
+      POSTGRES_USER: "django"
+      POSTGRES_PASSWORD: "django"
+    ports:
+        - "7001:5432"
+  
+
+  web:
+    build: ./backend
+    container_name: main.django
+    command: uwsgi uwsgi.ini
+    volumes:
+      - ./backend/config:/srv/code/config
+      - ./log:/var/log
+    depends_on: 
+      - db
+    ports: 
+      - "8000:8000"
